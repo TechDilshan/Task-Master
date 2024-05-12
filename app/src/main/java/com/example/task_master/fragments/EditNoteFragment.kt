@@ -56,7 +56,7 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note), MenuProvider {
 
         binding.editNoteTitle.setText(currentNote.noteTitle)
         binding.editNoteDesc.setText(currentNote.noteDesc)
-        binding.editDateTimeButton.setText(currentNote.noteDateTime)
+        binding.showDateTime.setText(currentNote.noteDateTime)
 
         val selectDateTimeButton = binding.editDateTimeButton
         val selectedDateTimeTextView = binding.selectedDateTimeTextView
