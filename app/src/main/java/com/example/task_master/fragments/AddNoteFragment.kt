@@ -1,5 +1,7 @@
 package com.example.task_master.fragments
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +20,9 @@ import com.example.task_master.R
 import com.example.task_master.databinding.FragmentAddNoteBinding
 import com.example.task_master.model.Note
 import com.example.task_master.viewmodel.NoteViewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
 
@@ -44,14 +49,44 @@ class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
 
         notesViewModel = (requireActivity() as MainActivity).noteViewModel
         addNoteView = view
+
+
+
+        val selectDateTimeButton = binding.selectDateTimeButton
+        val selectedDateTimeTextView = binding.selectedDateTimeTextView
+
+        selectDateTimeButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+            val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute = calendar.get(Calendar.MINUTE)
+
+            val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
+                val timePickerDialog = TimePickerDialog(requireContext(), { _, selectedHourOfDay, selectedMinute ->
+
+                    val selectedDateTime = Calendar.getInstance()
+                    selectedDateTime.set(selectedYear, selectedMonth, selectedDay, selectedHourOfDay, selectedMinute)
+
+                    val formattedDateTime = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(selectedDateTime.time)
+                    Toast.makeText(requireContext(), "Selected Date and Time: $formattedDateTime", Toast.LENGTH_SHORT).show()
+                    selectedDateTimeTextView.text = formattedDateTime
+                    selectedDateTimeTextView.visibility = View.VISIBLE
+                }, hourOfDay, minute, false)
+                timePickerDialog.show()
+            }, year, month, dayOfMonth)
+            datePickerDialog.show()
+        }
     }
 
     private fun saveNote(view: View){
         val noteTitle = binding.addNoteTitle.text.toString().trim()
         val noteDesc = binding.addNoteDesc.text.toString().trim()
+        val noteDateTime = binding.selectedDateTimeTextView.text.toString().trim()
 
         if (noteTitle.isNotEmpty()){
-            val note = Note(0,noteTitle, noteDesc)
+            val note = Note(0,noteTitle, noteDesc, noteDateTime)
             notesViewModel.addNote(note)
 
             Toast.makeText(addNoteView.context, "Note Saved", Toast.LENGTH_SHORT).show()
