@@ -1,0 +1,17 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradient background -->
+    <gradient
+        android:startColor="#C9EEF3"
+        android:endColor="#FFFFFF"
+        android:type="linear"
+        android:angle="45" />
+
+    <!-- Border -->
+    <stroke
+        android:width="4dp"
+        android:color="#05145F" /> <!-- Set border color and width here -->
+
+    <!-- Corner radius -->
+    <corners android:radius="10dp" /> <!-- Set corner radius here -->
+</shape>
+

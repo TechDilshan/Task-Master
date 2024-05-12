@@ -9,19 +9,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="12dp"
-        tools:context=".UpdateNoteFragment">
+        tools:context=".UpdateNoteFragment"
+        android:background="#ECFBFF">
 
         <TextView
             android:id="@+id/editNoteHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginStart="148dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins"
-            android:text="Edit Note."
-            android:textStyle="bold"
-            android:textColor="@color/red"
-            android:textSize="24sp" />
+            android:text="Edit Note"
+            android:textColor="@color/pink"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/editNoteTitle"
