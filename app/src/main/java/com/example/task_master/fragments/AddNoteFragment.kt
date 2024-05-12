@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+// add a new note
 class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
 
     private var addNoteBinding: FragmentAddNoteBinding? = null
@@ -36,22 +37,22 @@ class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        addNoteBinding = FragmentAddNoteBinding.inflate(inflater,container, false)
+        addNoteBinding = FragmentAddNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // menu provider
         val menuHost = requireActivity() as MenuHost
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+        // Create ViewModel
         notesViewModel = (requireActivity() as MainActivity).noteViewModel
         addNoteView = view
 
-
-
+        // date and time picker dialog
         val selectDateTimeButton = binding.selectDateTimeButton
         val selectedDateTimeTextView = binding.selectedDateTimeTextView
 
@@ -80,29 +81,32 @@ class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
         }
     }
 
-    private fun saveNote(view: View){
+    // Save the note
+    private fun saveNote(view: View) {
         val noteTitle = binding.addNoteTitle.text.toString().trim()
         val noteDesc = binding.addNoteDesc.text.toString().trim()
         val noteDateTime = binding.selectedDateTimeTextView.text.toString().trim()
 
-        if (noteTitle.isNotEmpty()){
-            val note = Note(0,noteTitle, noteDesc, noteDateTime)
+        if (noteTitle.isNotEmpty()) {
+            val note = Note(0, noteTitle, noteDesc, noteDateTime)
             notesViewModel.addNote(note)
 
             Toast.makeText(addNoteView.context, "Note Saved", Toast.LENGTH_SHORT).show()
-            view.findNavController().popBackStack(R.id.homeFragment,false)
-        } else{
+            view.findNavController().popBackStack(R.id.homeFragment, false)
+        } else {
             Toast.makeText(addNoteView.context, "Please enter note title", Toast.LENGTH_SHORT).show()
         }
     }
 
+    // Create menu items
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menu.clear()
         menuInflater.inflate(R.menu.menu_add_note, menu)
     }
 
+    // Handle menu item selection
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-        return when(menuItem.itemId){
+        return when (menuItem.itemId) {
             R.id.saveMenu -> {
                 saveNote(addNoteView)
                 true
@@ -111,10 +115,9 @@ class AddNoteFragment : Fragment(R.layout.fragment_add_note), MenuProvider {
         }
     }
 
+    // Clean up the view binding
     override fun onDestroy() {
         super.onDestroy()
         addNoteBinding = null
     }
-
-
 }

@@ -2,19 +2,18 @@ package com.example.task_master.fragments
 
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.task_master.MainActivity
 import com.example.task_master.R
 import com.example.task_master.adapter.NoteAdapter
 import com.example.task_master.databinding.FragmentHomeBinding
 import com.example.task_master.model.Note
 import com.example.task_master.viewmodel.NoteViewModel
 
+//display the all tasks
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -23,6 +22,7 @@ class HomeFragment : Fragment() {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var noteAdapter: NoteAdapter
 
+    // Create the fragment
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,13 +36,14 @@ class HomeFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
+        // implement the note adapter
         noteAdapter = NoteAdapter()
-
         binding.homeRecyclerView.apply {
             adapter = noteAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
 
+        // implement the ViewModel
         noteViewModel = ViewModelProvider(requireActivity()).get(NoteViewModel::class.java)
 
         noteViewModel.getAllNotes().observe(viewLifecycleOwner) { notes ->
@@ -50,11 +51,13 @@ class HomeFragment : Fragment() {
             updateUI(notes)
         }
 
+        // adding a new task
         binding.addNoteFab.setOnClickListener {
             navigateToAddNoteFragment()
         }
     }
 
+    // Navigate to the AddNoteFragment
     private fun navigateToAddNoteFragment() {
         val action = HomeFragmentDirections.actionHomeFragmentToAddNoteFragment()
         requireView().findNavController().navigate(action)
@@ -70,9 +73,11 @@ class HomeFragment : Fragment() {
         }
     }
 
+    // Create options menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home_menu, menu)
 
+        // Set search function
         val searchItem = menu.findItem(R.id.searchMenu)
         val searchView = searchItem.actionView as SearchView
 
@@ -88,6 +93,7 @@ class HomeFragment : Fragment() {
         })
     }
 
+    // Search notes
     private fun searchNotes(query: String?) {
         val searchQuery = "%$query%"
         noteViewModel.searchNotes(searchQuery).observe(viewLifecycleOwner) { notes ->
@@ -96,6 +102,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    // Clean view binding
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

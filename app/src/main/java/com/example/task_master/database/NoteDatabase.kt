@@ -6,8 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.task_master.model.Note
 
+// implement a Room database
 @Database(entities = [Note::class], version = 1, exportSchema = false)
 abstract class NoteDatabase : RoomDatabase() {
+
+    // retrieve the NoteDao
     abstract fun getNoteDao(): NoteDao
 
     companion object {
@@ -19,11 +22,12 @@ abstract class NoteDatabase : RoomDatabase() {
             instance ?: buildDatabase(context).also { instance = it }
         }
 
+        // build a database
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
                 NoteDatabase::class.java,
-                "note_database"
+                "note_database" // Database name
             ).build()
     }
 }

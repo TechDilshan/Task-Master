@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
+// edit note
 class EditNoteFragment : Fragment(R.layout.fragment_edit_note), MenuProvider {
 
     private var editNoteBinding: FragmentEditNoteBinding? = null
@@ -40,7 +41,6 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note), MenuProvider {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         editNoteBinding = FragmentEditNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -48,20 +48,24 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note), MenuProvider {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // menu provider
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
+        // Create ViewModel
         notesViewModel = (activity as MainActivity).noteViewModel
         currentNote = args.note!!
 
+        // Set values for views
         binding.editNoteTitle.setText(currentNote.noteTitle)
         binding.editNoteDesc.setText(currentNote.noteDesc)
         binding.showDateTime.setText(currentNote.noteDateTime)
 
+        //date and time picker dialog
         val selectDateTimeButton = binding.editDateTimeButton
         val selectedDateTimeTextView = binding.selectedDateTimeTextView
 
-        var formattedDateTime: String? = null // Declare formattedDateTime variable
+        var formattedDateTime: String? = null
 
         selectDateTimeButton.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -87,26 +91,28 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note), MenuProvider {
             datePickerDialog.show()
         }
 
+        // Update note
         binding.editNoteFab.setOnClickListener{
             val noteTitle = binding.editNoteTitle.text.toString().trim()
             val noteDesc = binding.editNoteDesc.text.toString().trim()
 
-            if (noteTitle.isNotEmpty()){
+            if (noteTitle.isNotEmpty()) {
                 val note = Note(currentNote.id, noteTitle, noteDesc, formattedDateTime ?: currentNote.noteDateTime)
                 notesViewModel.updateNote(note)
-                view.findNavController().popBackStack(R.id.homeFragment,false)
+                view.findNavController().popBackStack(R.id.homeFragment, false)
 
-            } else{
+            } else {
                 Toast.makeText(context, "Please enter note title", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun deleteNote(){
+    // delete note
+    private fun deleteNote() {
         AlertDialog.Builder(activity).apply {
             setTitle("Delete Note")
             setMessage("Do you want to delete this note ? ")
-            setPositiveButton("Delete"){_,_ ->
+            setPositiveButton("Delete") { _, _ ->
                 notesViewModel.deleteNote(currentNote)
                 Toast.makeText(context, "Note Deleted", Toast.LENGTH_SHORT).show()
                 view?.findNavController()?.popBackStack(R.id.homeFragment, false)
@@ -115,11 +121,13 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note), MenuProvider {
         }.create().show()
     }
 
+    // Create menu items
     override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
         menu.clear()
         menuInflater.inflate(R.menu.menu_edit_note, menu)
     }
 
+    // Handle menu item selection
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when(menuItem.itemId){
             R.id.deleteMenu -> {
@@ -130,10 +138,9 @@ class EditNoteFragment : Fragment(R.layout.fragment_edit_note), MenuProvider {
         }
     }
 
+    // Clean view binding
     override fun onDestroy() {
         super.onDestroy()
         editNoteBinding = null
     }
-
-
 }
