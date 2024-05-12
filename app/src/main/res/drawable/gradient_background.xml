@@ -8,8 +8,8 @@
 
     <!-- Border -->
     <stroke
-        android:width="4dp"
-        android:color="#05145F" /> <!-- Set border color and width here -->
+        android:width="1dp"
+        android:color="#081B79" /> <!-- Set border color and width here -->
 
     <!-- Corner radius -->
     <corners android:radius="10dp" /> <!-- Set corner radius here -->

@@ -22,7 +22,7 @@
             android:tintMode="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/baseline_add_task_24" />
+            app:srcCompat="@drawable/baseline_add_circle_24" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/homeRecyclerView"
@@ -39,7 +39,7 @@
             android:layout_height="match_parent"
             android:id="@+id/emptyNotesImage"
             android:visibility="gone"
-            android:src="@drawable/emptybkg"/>
+            android:src="@drawable/emptynote"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
