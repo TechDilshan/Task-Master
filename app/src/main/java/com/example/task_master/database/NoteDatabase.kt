@@ -6,30 +6,24 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.task_master.model.Note
 
-@Database(entities = [Note::class], version = 13)
-abstract class NoteDatabase: RoomDatabase() {
+@Database(entities = [Note::class], version = 1, exportSchema = false)
+abstract class NoteDatabase : RoomDatabase() {
     abstract fun getNoteDao(): NoteDao
 
-    companion object{
+    companion object {
         @Volatile
         private var instance: NoteDatabase? = null
         private val LOCK = Any()
 
-        operator fun invoke(context: Context) = instance ?:
-        synchronized(LOCK){
-            instance ?:
-            createDatabase(context).also{
-                instance = it
-            }
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: buildDatabase(context).also { instance = it }
         }
 
-        private fun createDatabase(context: Context) =
+        private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
                 NoteDatabase::class.java,
-                "note_db"
+                "note_database"
             ).build()
-
-
     }
 }
